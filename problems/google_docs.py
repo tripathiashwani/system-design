@@ -6,12 +6,20 @@ class DocumentElement(ABC):
         pass
 
 class TextElement(DocumentElement):
-    def render(self,text) -> str:
-        return text
+
+    def __init__(self, text: str):
+        self.text = text
+
+    def render(self) -> str:
+        return self.text
+    
 
 class ImageElement(DocumentElement):
-    def render(self, image_url) -> str:
-        return f'<img src="{image_url}" alt="Image">'
+    def __init__(self, image_url):
+        self.image_url = image_url
+
+    def render(self) -> str:
+        return f'<img src="{self.image_url}" alt="Image">'
     
 
 class Document:
@@ -53,9 +61,8 @@ class GoogleDocs:
         text_element.render(text)
 
     def add_image(self, image_url: str):
-        image_element = ImageElement()
+        image_element = ImageElement(image_url)
         self.document.add_element(image_element)
-        image_element.render(image_url)
 
     def save_document(self, filename: str):
         self.persistence.save(self.document, filename)
